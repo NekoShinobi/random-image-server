@@ -1,0 +1,15 @@
+
+services:
+  random-image-server:
+    pull_policy: build  # change if running pre-built image
+    image: xNinjaKittyx/random-image-server:latest
+    build: .
+    container_name: random-image-server
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+    # Change ./images to the directory you want your images.
+      - ${IMAGE_DIR}:/app/images
+    environment:
+      - IMAGE_DIR=/app/images
