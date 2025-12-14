@@ -22,22 +22,26 @@ RUN --mount=type=cache,target=$SCCACHE_DIR,sharing=locked \
     cargo build --release
 
 FROM ubuntu:24.04
+
+RUN apt update && apt install -y xz-utils && apt clean && rm -rf /var/lib/apt/lists/*
+
+ARG S6_OVERLAY_VERSION="3.2.1.0"
+ARG S6_OVERLAY_ARCH="x86_64"
+
 WORKDIR /app
-
-ENV USER=abc
-ENV GROUP=$USER
-ENV UID=1001
-ENV GID=1001
-
-RUN  groupadd -g $GID $GROUP \
-    &&  useradd -u $UID -g $GROUP -M -p '' $USER
+RUN mkdir /images
+RUN groupadd -g 991 abc &&  useradd -u 991 -g abc -M -p '' abc
 
 
-COPY --from=builder --chown=$USER:$GROUP /app/target/release/random-image-server /app/random-image-server
-
-RUN mkdir /app/images && chown -R $USER:$GROUP /app
-
-USER abc
+COPY --from=builder /app/target/release/random-image-server /app/random-image-server
 
 
-CMD ["/app/random-image-server"]
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz && rm /tmp/s6-overlay-noarch.tar.xz
+ADD https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-${S6_OVERLAY_ARCH}.tar.xz /tmp
+RUN tar -C / -Jxpf /tmp/s6-overlay-${S6_OVERLAY_ARCH}.tar.xz && rm /tmp/s6-overlay-${S6_OVERLAY_ARCH}.tar.xz
+ADD --chmod=755 "https://raw.githubusercontent.com/linuxserver/docker-mods/mod-scripts/lsiown.v1" "/usr/bin/lsiown"
+
+COPY root/ /
+
+ENTRYPOINT ["/init"]

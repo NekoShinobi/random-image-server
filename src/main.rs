@@ -8,7 +8,7 @@ use std::sync::{Arc, LazyLock, Mutex};
 use std::time::SystemTime;
 
 static IMAGE_DIR: LazyLock<String> =
-    LazyLock::new(|| env::var("IMAGE_DIR").unwrap_or_else(|_| "/app/images".to_string()));
+    LazyLock::new(|| env::var("IMAGE_DIR").unwrap_or_else(|_| "/images".to_string()));
 
 // Cache for image files
 struct ImageCache {
