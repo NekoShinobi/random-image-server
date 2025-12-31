@@ -1,6 +1,6 @@
 use actix_files::NamedFile;
 use actix_web::{App, HttpResponse, HttpServer, Result, web};
-use rand::seq::SliceRandom;
+use rand::seq::IndexedRandom;
 use std::env;
 use std::fs;
 use std::path::PathBuf;
@@ -84,7 +84,7 @@ async fn random_image(cache: web::Data<Arc<Mutex<ImageCache>>>) -> Result<HttpRe
         )));
     }
 
-    let mut rng = rand::thread_rng();
+    let mut rng = rand::rng();
     let random_image = images.choose(&mut rng).ok_or_else(|| {
         actix_web::error::ErrorInternalServerError("Failed to select random image")
     })?;
