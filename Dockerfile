@@ -1,4 +1,4 @@
-FROM rust:1.92 AS base
+FROM rust:1.93 AS base
 RUN apt update && apt upgrade -y && apt install -y cmake && apt clean && rm -rf /var/lib/apt/lists/*
 RUN cargo install cargo-chef --version ^0.1
 RUN cargo install sccache --version ^0.12
