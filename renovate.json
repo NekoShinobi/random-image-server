@@ -1,0 +1,11 @@
+{
+  "extends": ["config:recommended"],
+  "packageRules": [
+    {
+      "groupName": "Rust Minor & Patch",
+      "matchManagers": ["cargo"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "labels": ["rust", "dependencies"]
+    }
+  ]
+}
