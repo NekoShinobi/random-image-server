@@ -21,7 +21,7 @@ COPY . .
 RUN --mount=type=cache,target=$SCCACHE_DIR,sharing=locked \
     cargo build --release
 
-FROM ubuntu:24.04
+FROM ubuntu:26.04
 
 RUN apt update && apt install -y xz-utils && apt clean && rm -rf /var/lib/apt/lists/*
 
