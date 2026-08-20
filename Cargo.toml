@@ -5,6 +5,6 @@ edition = "2024"
 
 [dependencies]
 actix-web = "4"
-actix-files = "0.6.10"
+actix-files = "0.7.0"
 tokio = { version = "1.49.0", features = ["full"] }
 rand = "0.10.0"
